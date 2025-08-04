@@ -17,10 +17,11 @@ jobs:
         with:
           node-version: 18
 
-      - name: Clean install dependencies
+       - name: Remove existing modules and lock undici
         run: |
-          rm -rf node_modules package-lock.json
-          npm install
+       rm -rf node_modules package-lock.json
+       npm install
+
 
       - name: Run meta checker
         run: npm start
