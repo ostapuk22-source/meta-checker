@@ -1,5 +1,4 @@
-// check-meta.js
-import fetch from 'node-fetch';
+import axios from 'axios';
 import { parseStringPromise } from 'xml2js';
 import * as cheerio from 'cheerio';
 import fs from 'fs/promises';
@@ -7,16 +6,16 @@ import fs from 'fs/promises';
 const SITEMAP_URL = 'https://www.whitepage.studio/sitemap.xml';
 
 async function fetchSitemapUrls() {
-  const res = await fetch(SITEMAP_URL);
-  const xml = await res.text();
+  const res = await axios.get(SITEMAP_URL);
+  const xml = res.data;
   const parsed = await parseStringPromise(xml);
   return parsed.urlset.url.map(entry => entry.loc[0]);
 }
 
 async function checkMetaTags(url) {
   try {
-    const res = await fetch(url);
-    const html = await res.text();
+    const res = await axios.get(url);
+    const html = res.data;
     const $ = cheerio.load(html);
     const title = $('title').text();
     const description = $('meta[name="description"]').attr('content');
