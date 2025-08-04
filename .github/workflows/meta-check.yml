@@ -17,17 +17,13 @@ jobs:
         with:
           node-version: 18
 
-      - name: Clean deps (видаляє старі залишки)
-        run: rm -rf node_modules package-lock.json
-
-      - name: Install fresh deps
+      - name: Install deps
         run: npm install
 
       - name: Run meta checker
         run: npm start
 
-      - name: Send report
-        if: success()
+      - name: Send report by email
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.resend.com
