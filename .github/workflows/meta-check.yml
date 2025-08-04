@@ -1,0 +1,38 @@
+name: Daily Meta Tag Check
+
+on:
+  schedule:
+    - cron: '0 8 * * *' # щодня о 11:00 за Києвом (UTC+3)
+  workflow_dispatch:
+
+jobs:
+  check-meta:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install deps
+        run: npm install
+
+      - name: Run meta checker
+        run: npm start
+
+      - name: Send report by email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.resend.com
+          server_port: 587
+          username: apikey
+          password: ${{ secrets.RESEND_API_KEY }}
+          subject: Metatags website check - ${{ github.run_id }}
+          to: marketing@whitepage.studio
+          from: metabot@whitepage.studio
+          body: |
+            Please find the attached meta check report.
+          attachments: report.txt
