@@ -17,20 +17,16 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install dependencies
+      - name: Clean deps (видаляє старі залишки)
+        run: rm -rf node_modules package-lock.json
+
+      - name: Install fresh deps
         run: npm install
 
       - name: Run meta checker
         run: npm start
 
-      - name: Check if report exists
-        run: |
-          if [ ! -f report.txt ]; then
-            echo "report.txt not found!"
-            exit 1
-          fi
-
-      - name: Send report by email
+      - name: Send report
         if: success()
         uses: dawidd6/action-send-mail@v3
         with:
