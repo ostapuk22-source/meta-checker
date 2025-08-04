@@ -17,8 +17,10 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install deps
-        run: npm install
+      - name: Clean install dependencies
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install
 
       - name: Run meta checker
         run: npm start
@@ -34,5 +36,7 @@ jobs:
           to: marketing@whitepage.studio
           from: metabot@whitepage.studio
           body: |
-            Please find the attached meta check report.
+            🧠 Daily meta tag check report is attached.
+            Repository: ${{ github.repository }}
+            Run ID: ${{ github.run_id }}
           attachments: report.txt
